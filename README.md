@@ -9,10 +9,10 @@
 
 ## How use it
 run it to compile
-`make`
+```make```
 
 run it to start a server
-`./server.out`
+```./server.out```
 
 run it in your client
-`./client.out`
+```./client.out```
