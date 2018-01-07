@@ -8,13 +8,11 @@
 
 #define PORT 8080
 
-int main(int argc, char const *argv[]) {
-  // build a socket
-  int clientSocket;
-  clientSocket = socket(AF_INET,SOCK_STREAM,0);
+int connectServer(){
+  int server = socket(AF_INET,SOCK_STREAM,0);
 
-  if(clientSocket == -1)
-    printf("Build a clientSocket fail.\n");
+  if(server == -1)
+    printf("Build a server fail.\n");
 
   // setting
   struct sockaddr_in clientInfo;
@@ -26,20 +24,30 @@ int main(int argc, char const *argv[]) {
   clientInfo.sin_port = htons(PORT);
 
   // connect
-  int err = connect(clientSocket,(struct sockaddr *)&clientInfo,sizeof(clientInfo));
+  int err = connect(server,(struct sockaddr *)&clientInfo,sizeof(clientInfo));
   if(err == -1)
     printf("Connect serverSocket fail.\n");
 
-  char msg[100] = "There is client", input[100];
+  return server;
+}
 
-  // recv(clientSocket,input,sizeof(input),0);
-  // printf("%s\n",input);
+int main(int argc, char const *argv[]) {
+  // build a socket
+  int serverSocket;
+
+  serverSocket = connectServer();
+
+
+  // start the game
+  // refrence how to use function
+  // recv(serverSocket,msg,sizeof(msg),0);
+  // send(serverSocket,msg,sizeof(msg),0);
 
   char get[16];
-  recv(clientSocket,get,sizeof(get),0);
+  recv(serverSocket,get,sizeof(get),0);
   printf("%c %d %c %d \n",get[0],get[1],get[2],get[3]);
 
-  close(clientSocket);
+  close(serverSocket);
 
   return 0;
 }

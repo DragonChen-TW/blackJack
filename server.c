@@ -12,7 +12,10 @@
 
 int setServer(int *s_socket,int *infoLen){
   // build serverSocket
+
   *s_socket = socket(PF_INET,SOCK_STREAM,0);
+  if(*s_socket == -1)
+    printf("Build a serverSocket fail.\n");
 
   // setting
   struct sockaddr_in serverInfo;
@@ -24,8 +27,13 @@ int setServer(int *s_socket,int *infoLen){
   serverInfo.sin_port = htons(PORT);
 
   // bind and listen
-  bind(*s_socket,(struct sockaddr *)&serverInfo,sizeof(serverInfo));
-  listen(*s_socket,4);
+  int temp;
+  temp = bind(*s_socket,(struct sockaddr *)&serverInfo,sizeof(serverInfo));
+  if(temp == -1)
+    printf("bind serverSocket Fail.\n");
+  temp = listen(*s_socket,4);
+  if(temp == -1)
+    printf("listen serverSocket fail.\n");
 
   printf("-----Server is listening-----\n");
 }
@@ -58,36 +66,25 @@ int main(int argc, char const *argv[]) {
   int serverSocket, clientSockets[4];
   int infoLen;
 
-
   setServer(&serverSocket,&infoLen);
   waitClients(serverSocket,infoLen,clientSockets);
 
-// recv(clients[0],input,sizeof(input),0);
-// send(clientSocket,msg,sizeof(msg),0);
 
-
+  // init all cards
   Card all_cards[52], player[4][5];
   int all_len, player_len[4], max;
 
   initPlayer(all_cards,&all_len,player,player_len);
   initSend(clientSockets,player);
 
-  // sendCardToClient(clientSockets,player);
-  //
-  // char msg[32] = {0};
-  //
-  // printf("%c %d \n",player[0][0].flow,player[0][0].point);
-  // msg[0] = player[0][0].flow;
-  // msg[1] = player[0][0].point;
-  // send(clientSockets[0],msg,sizeof(msg),0);
-  //
-  // sleep(1);
 
-  // printf("%c %d \n",player[1][0].flow,player[1][0].point);
-  // msg[0] = player[1][0].flow;
-  // msg[1] = player[1][0].point;
-  // send(clientSockets[1],msg,sizeof(msg),0);
+  // start the game
+  char msg[16];
+  // refrence how to use function
+  // recv(clientSockets[0],,sizeof(msg),0);
+  // send(clientSocket[0],msg,sizeof(msg),0);
 
+  close(serverSocket);
 
   return 0;
 }
