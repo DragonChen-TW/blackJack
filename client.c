@@ -35,10 +35,9 @@ int main(int argc, char const *argv[]) {
   // recv(clientSocket,input,sizeof(input),0);
   // printf("%s\n",input);
 
-  char get[32];
+  char get[16];
   recv(clientSocket,get,sizeof(get),0);
-  printf("%c %d \n",get[0],get[1]);
-  scanf("%s",get);
+  printf("%c %d %c %d \n",get[0],get[1],get[2],get[3]);
 
   close(clientSocket);
 

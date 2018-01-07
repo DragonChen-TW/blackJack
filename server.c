@@ -36,11 +36,20 @@ void waitClients(int serverSocket,int infoLen,int clients[4]){
   int i;
   for(i = 0;i < 2;++i){
     clients[i] = accept(serverSocket,(struct sockaddr *)&clientInfo,&infoLen);
-    char msg[100] = "Welcome to bigOldTwo Server";
-    // send(clients[i],msg,sizeof(msg),0);
 
     printf("Accepted player %d from %s.\n",i + 1,
     inet_ntop(clientInfo.ss_family,&(((struct sockaddr_in *)&clientInfo))->sin_addr,clientIP, 16));
+  }
+}
+void initSend(int clients[4],Card player[4][5]){
+  char msg[16];
+  for(int i = 0;i < 2;++i){
+    msg[0] = player[i][0].flow;
+    msg[1] = player[i][0].point;
+    msg[2] = player[i][1].flow;
+    msg[3] = player[i][1].point;
+
+    send(clients[i],msg,sizeof(msg),0);
   }
 }
 
@@ -56,18 +65,23 @@ int main(int argc, char const *argv[]) {
 // recv(clients[0],input,sizeof(input),0);
 // send(clientSocket,msg,sizeof(msg),0);
 
-  Card all_cards[52], player[4][13];
-  createAllCard(all_cards);
-  sendCardToClient(clientSockets,player);
 
-  char msg[32] = {0};
+  Card all_cards[52], player[4][5];
+  int all_len, player_len[4], max;
 
-  printf("%c %d \n",player[0][0].flow,player[0][0].point);
-  msg[0] = player[0][0].flow;
-  msg[1] = player[0][0].point;
-  send(clientSockets[0],msg,sizeof(msg),0);
+  initPlayer(all_cards,&all_len,player,player_len);
+  initSend(clientSockets,player);
 
-  sleep(1);
+  // sendCardToClient(clientSockets,player);
+  //
+  // char msg[32] = {0};
+  //
+  // printf("%c %d \n",player[0][0].flow,player[0][0].point);
+  // msg[0] = player[0][0].flow;
+  // msg[1] = player[0][0].point;
+  // send(clientSockets[0],msg,sizeof(msg),0);
+  //
+  // sleep(1);
 
   // printf("%c %d \n",player[1][0].flow,player[1][0].point);
   // msg[0] = player[1][0].flow;
