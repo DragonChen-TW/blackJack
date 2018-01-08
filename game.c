@@ -35,15 +35,18 @@ void initPlayer(Card cards[52],int *all_len,Card player[4][5],int p_len[4]){
 
 int calPoint(Card player[5],int p_len){
 	int point = 0;
-	int isAce = 0;
+	int ace = 0;
 	for(int i=0;i<p_len;i++){
 		if(player[i].point==1){
 			point += 11;
-			isAce = 1;
+			ace++;
 		}
 		else if(player[i].point>10) point += 10;
 		else point += player[i].point;
 	}
-	if(isAce==1 && point>21) point = point - 11 + 1;
+	while(point > 21 && ace > 0){
+		--ace;
+		point -= 10;
+	}
 	return point;
 }
