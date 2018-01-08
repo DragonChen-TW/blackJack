@@ -1,7 +1,7 @@
 all:server_client
 server_client:server.c client.c card.o game.o
 	gcc server.c card.o game.o -o server.out
-	gcc client.c card.o -o client.out
+	gcc client.c card.o game.o -o client.out
 	rm *.o
 card.o:card.c card.h
 	gcc -c card.c
