@@ -105,8 +105,11 @@ void startGame(int clients[4],Card player[4][5],Card all_cards[52],int *all_len,
   			playerId = i;
   		}
   	}
+
   	for(int i=0;i<2;i++){
-  		if(i==playerId) strcpy(msg,"Win");
+  		//if(i==playerId) strcpy(msg,"Win");
+  		if(point[0]==point[1]) strcpy(msg,"even");
+  		else if(point[i]==point[playerId]) strcpy(msg,"Win");
   		else strcpy(msg,"Lose");
   		send(clients[i],msg,sizeof(msg),0);
   	}

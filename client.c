@@ -9,7 +9,7 @@
 
 #define PORT 8080
 
-int connectServer(){
+int connectServer(char IP[16]){
   int server = socket(AF_INET,SOCK_STREAM,0);
 
   if(server == -1)
@@ -21,7 +21,7 @@ int connectServer(){
   clientInfo.sin_family = AF_INET;
 
   // IP address
-  clientInfo.sin_addr.s_addr = inet_addr("127.0.0.1");
+  clientInfo.sin_addr.s_addr = inet_addr(IP);
   clientInfo.sin_port = htons(PORT);
 
   // connect
@@ -35,8 +35,12 @@ int connectServer(){
 int main(int argc, char const *argv[]) {
   // build a socket
   int serverSocket;
+  char ipAddress[16];
+  
+  printf("Please enter IP Address: ");
+  scanf("%s",ipAddress);
 
-  serverSocket = connectServer();
+  serverSocket = connectServer(ipAddress);
 
 
   // start the game
