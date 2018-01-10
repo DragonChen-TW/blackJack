@@ -39,7 +39,7 @@ int initGraphic(){
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
   glutInitWindowSize(640,480);      //視窗長寬
   glutInitWindowPosition(0,0);      //視窗左上角的位置
-  glutCreateWindow("這裡是視窗標題");    //建立視窗
+  glutCreateWindow("Black Jacks - Ver 1.2");    //建立視窗
   /************************/
 
   // hand[0] = makeCard('S',1);
@@ -112,8 +112,6 @@ void courage(int length){
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,buffer[i]);
     }
   }
-
-
 }
 
 void Display(void){
@@ -233,7 +231,7 @@ void Mouse(int button,int state,int x,int y){
 }
 void Keyboard(unsigned char key, int x, int y){
   // printf("你所按按鍵的碼是%d\t此時視窗內的滑鼠座標是(%d,%d)\n", key, x, y);
-
+  char get[16];
   int status = gameLoop(server_socket,hand,&hand_len,&point,key);
 
   glutPostRedisplay();
@@ -243,7 +241,18 @@ void Keyboard(unsigned char key, int x, int y){
   if(status == 0){
     printf("All Done.\n");
 
-    result(server_socket,hand,&hand_len,&point);
+    result(get,server_socket,hand,&hand_len,&point);
+
+    // print Last message
+    char buffer[50];
+    if(strcmp(get,"Win") == 0)strcpy(buffer,"You win !! Winner Winner Chicken Dinner !!");
+    else strcpy(buffer,"You lose ... You will be lucky next time...");
+
+    glColor3f(1.0,1.0,1.0);
+    glRasterPos3f(-10.0,0.0,0);
+    for(int i = 0;buffer[i] != '\0' ;i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,buffer[i]);
+    }
   }
 }
 

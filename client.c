@@ -98,13 +98,11 @@ void socketSetting(int *server_socket,Card hand[5],int *hand_len) {
   loadCard(hand[1],1);
 }
 
-void result(int server_socket, Card hand[5], int *hand_len,int *point){
-  char get[16];
+void result(char get[16],int server_socket, Card hand[5], int *hand_len,int *point){
   // counting the result
   recv(server_socket,get,sizeof(get),0);
   printHand(hand,hand_len,point);
   printf("Result: %s\n",get);
 
   close(server_socket);
-
 }
