@@ -190,7 +190,7 @@ void Display(void){
   if(hand_len>1){
     courage(hand_len);
   }
-  for(int i = 0;i<hand_len;i++){
+  for(int i = 0;i < hand_len;i++){
     glBegin(GL_QUADS);
       glColor3f(1.0,1.0,1.0);
       glVertex2f(cardX,cardY);
@@ -237,6 +237,8 @@ void Keyboard(unsigned char key, int x, int y){
   int status = gameLoop(server_socket,hand,&hand_len,&point,key);
 
   glutPostRedisplay();
+
+  printf("Hand_len: %d\n",hand_len);
 
   if(status == 0){
     printf("All Done.\n");

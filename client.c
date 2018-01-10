@@ -55,6 +55,7 @@ int gameLoop(int server,Card hand[5],int *hand_len,int *point,char opt){
 
   recv(server,get,sizeof(get),0);
 
+  printf("Got new card %c %d\n",get[0],get[1]);
   // server give you a new card !!
   // pick it up !!
 	hand[*hand_len] = makeCard(get[0],get[1]);
