@@ -103,6 +103,7 @@ void startGame(int clients[4],Card player[4][5],Card all_cards[52],int *all_len,
 }
 
 void findWinner(int clients[4],int point[4]){
+  printf("---start findWinner---\n");
   char results[4][16];
   int max = 0, count = 0;
   // find those boom and max
@@ -131,6 +132,7 @@ void findWinner(int clients[4],int point[4]){
   for(int i = 0;i < PLAYER_NUM;++i){
     send(clients[i],results[i],sizeof(results[i]),0);
   }
+  printf("---end findWinner---\n");
 }
 
 int main(int argc, char const *argv[]) {

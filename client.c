@@ -7,6 +7,7 @@
 
 #include "card.h"
 #include "game.h"
+#include "printout.h"
 
 #define PORT 8080
 
@@ -41,74 +42,68 @@ void printHand(Card hand[5],int *hand_len,int *point){
   printf("Point: %d\n",*point);
 }
 
-void gameLoop(int server,Card hand[5],int *hand_len,int *point){
+int gameLoop(int server,Card hand[5],int *hand_len,int *point,char opt){
   char get[16];
   char option[2];
 
-  printHand(hand,hand_len,point);
+  if(opt == 'a') strcpy(option,"1");
+  else strcpy(option,"2");
 
-  // receive each round msg from server
+  send(server,option,sizeof(option),0);
+
+  if(strcmp(option,"2") == 0)return 0;
+
   recv(server,get,sizeof(get),0);
 
-  while(1){
-    printf("Please enter a option\n");
-    printf("(1) Draw one card\n");
-    printf("(2) Stop\n");
+  // server give you a new card !!
+  // pick it up !!
+	hand[*hand_len] = makeCard(get[0],get[1]);
+	*hand_len += 1;
 
-    scanf("%s",option);
-    send(server,option,sizeof(option),0);
+  printHand(hand,hand_len,point);
 
-    if(strcmp(option,"2") == 0)break;
-
-    recv(server,get,sizeof(get),0);
-
-    // server give you a new card !!
-    // pick it up !!
-  	hand[*hand_len] = makeCard(get[0],get[1]);
-  	*hand_len += 1;
-
-    printHand(hand,hand_len,point);
-
-    if(*point > 21){
-      printf("You boom !!\n");
-      break;
-    }
+  if(*point > 21){
+    printf("You boom !!\n");
+    return 0;
   }
+
+  return 1;
 }
 
-int main(int argc, char const *argv[]) {
+void socketSetting(int *server_socket,Card hand[5],int *hand_len) {
   // build a socket
-  int server_socket;
   char ip_address[16];
 
   // enter ip and connect server
-  printf("Please enter server's IP Address: ");
-  scanf("%s",ip_address);
+  // printf("Please enter server's IP Address: ");
+  // scanf("%s",ip_address);
   strcpy(ip_address,"140.117.178.29");
 
-  server_socket = connectServer(ip_address);
+  *server_socket = connectServer(ip_address);
 
 
   // global variable
-  Card hand[5];
-  int hand_len = 2, point;
+  *hand_len = 2;
+
   char get[16];
 
   // get the very first two cards
-  recv(server_socket,get,sizeof(get),0);
+  recv(*server_socket,get,sizeof(get),0);
   hand[0] = makeCard(get[0],get[1]);
   hand[1] = makeCard(get[2],get[3]);
 
-  // the game loop
-  gameLoop(server_socket,hand,&hand_len,&point);
+  // init graphic
+  loadCard(hand[0],0);
+  loadCard(hand[1],1);
+}
 
+void result(int server_socket, Card hand[5], int *hand_len,int *point){
+  char get[16];
   // counting the result
-  printHand(hand,&hand_len,&point);
   recv(server_socket,get,sizeof(get),0);
-  printf("point: %d\n",point);
+  printHand(hand,hand_len,point);
   printf("Result: %s\n",get);
 
   close(server_socket);
 
-  return 0;
 }
