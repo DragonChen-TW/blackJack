@@ -100,7 +100,7 @@ void socketSetting(int *server_socket,Card hand[5],int *hand_len) {
 
 void result(char get[16],int server_socket, Card hand[5], int *hand_len,int *point){
   // counting the result
-  recv(server_socket,get,sizeof(temp),0);
+  recv(server_socket,get,sizeof(get),0);
   printHand(hand,hand_len,point);
   printf("Result: %s\n",get);
 
